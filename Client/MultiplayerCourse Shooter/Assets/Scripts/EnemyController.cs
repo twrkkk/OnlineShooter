@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private float _lerpForce = 0.25f;
+    [SerializeField] private float _lerpForce = 2f;
     [SerializeField] private int _delayCount = 5;
     private Vector3 _targetPosition; 
     private Vector3 _prevPosition;
@@ -50,7 +50,7 @@ public class EnemyController : MonoBehaviour
         _avgDelay = AvgDelay();
 
         Vector3 direction = _targetPosition - _prevPosition;
-        transform.position = Vector3.Lerp(transform.position, _targetPosition + direction * _avgDelay, _lerpForce);
+        transform.position = Vector3.Lerp(transform.position, _targetPosition + direction * _avgDelay, _lerpForce * Time.deltaTime);
     }
 
     private void AddNewDelay()

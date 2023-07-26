@@ -156,3 +156,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63e7f766476940544ae083b61e2f6033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lerpForce: 2
+  _delayCount: 5
