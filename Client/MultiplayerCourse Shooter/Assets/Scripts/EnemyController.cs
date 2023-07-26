@@ -20,10 +20,6 @@ public class EnemyController : MonoBehaviour
         _prevPosition = transform.position;
     }
 
-    private void Start()
-    {
-        Application.targetFrameRate = 5;
-    }
     internal void OnChange(List<DataChange> changes)
     {
         AddNewDelay();
