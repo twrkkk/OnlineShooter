@@ -8,64 +8,70 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private float _lerpForce = 2f;
     [SerializeField] private int _delayCount = 5;
+    [SerializeField] private EnemyCharacter _character;
     private Vector3 _targetPosition; 
-    private Vector3 _prevPosition;
+    private Vector3 _velocity; 
     private List<float> _delays = new List<float>();
-    private float _timer;
-    private float _avgDelay;
+    private float _lastReceiveTime;
+    private float _avgDelay 
+    { 
+        get 
+        {
+            float sum = 0f;
+            foreach (var delay in _delays)
+                sum += delay;
+            sum/=_delays.Count;
+
+            return sum;
+        } 
+    }
 
     private void Awake()
     {
         _targetPosition = transform.position;   
-        _prevPosition = transform.position;
+    }
+
+    private void SetReceiveTime()
+    {
+        float delay = Time.time - _lastReceiveTime;
+        _lastReceiveTime = Time.time;
+
+        _delays.Add(delay);
+        if (_delays.Count > _delayCount)
+            _delays.RemoveAt(0);
     }
 
     internal void OnChange(List<DataChange> changes)
     {
-        AddNewDelay();
-        _timer = 0f;
+        SetReceiveTime();
 
         foreach (DataChange change in changes)
         {
             switch (change.Field)
             {
-                case "x":
+                case "pX":
                     _targetPosition.x = (float)change.Value;
-                    _prevPosition.x = (float)change.PreviousValue;
                     break;
-                case "y":
+                case "pY":
+                    _targetPosition.y = (float)change.Value;
+                    break;
+                case "pZ":
                     _targetPosition.z = (float)change.Value;
-                    _prevPosition.z = (float)change.PreviousValue;
+                    break;
+                case "vX":
+                    _velocity.x = (float)change.Value;
+                    break;
+                case "vY":
+                    _velocity.y = (float)change.Value;
+                    break;
+                case "vZ":
+                    _velocity.z = (float)change.Value;
                     break;
                 default:
                     break;
             }
         }
-    }
 
-    private void Update()
-    {
-        _timer += Time.deltaTime;
-
-        _avgDelay = AvgDelay();
-
-        Vector3 direction = _targetPosition - _prevPosition;
-        transform.position = Vector3.Lerp(transform.position, _targetPosition + direction * _avgDelay, _lerpForce * Time.deltaTime);
-    }
-
-    private void AddNewDelay()
-    {
-        _delays.Add(_timer);
-        if (_delays.Count > _delayCount)
-            _delays.RemoveAt(0);
-    }
-
-    private float AvgDelay()
-    {
-        foreach (float delay in _delays)
-            _avgDelay += delay;
-        _avgDelay /= _delayCount;
-
-        return _avgDelay;
+        _character.SetMovement(_targetPosition, _velocity, _avgDelay);
     }
 }

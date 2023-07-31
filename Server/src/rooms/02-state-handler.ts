@@ -6,19 +6,19 @@ export class Player extends Schema {
     pX = Math.floor(Math.random() * 50) - 25;
 
     @type("number")
-    pY = Math.floor(Math.random() * 50) - 25;
+    pY = 0;
 
     @type("number")
     pZ = Math.floor(Math.random() * 50) - 25;
 
     @type("number")
-    vX = Math.floor(Math.random() * 50) - 25;
+    vX = 0;
     
     @type("number")
-    vY = Math.floor(Math.random() * 50) - 25;
+    vY = 0;
 
     @type("number")
-    vZ = Math.floor(Math.random() * 50) - 25;
+    vZ = 0;
 }
 
 export class State extends Schema {

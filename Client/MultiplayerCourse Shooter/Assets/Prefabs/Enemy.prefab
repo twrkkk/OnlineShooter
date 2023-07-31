@@ -158,3 +158,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lerpForce: 2
   _delayCount: 5
+  _character: {fileID: 4416692661072762745}
