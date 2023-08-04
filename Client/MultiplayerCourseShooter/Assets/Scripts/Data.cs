@@ -20,5 +20,5 @@ public struct ShootInfo
 {
     public string key;
     public V3 pos;
-    public V3 dir;
+    public V3 vel;
 }

@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGun : MonoBehaviour
+public class PlayerGun : Gun
 {
-    [SerializeField] private Bullet _bullet;
     [SerializeField] private Transform _bulletSpawn;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _shootDelay;
@@ -13,28 +12,27 @@ public class PlayerGun : MonoBehaviour
     private ShootInfo _shootInfo;
     public ShootInfo ShootInfo => _shootInfo;
 
-    public Action onShoot;
     public bool TryShoot()
     {
         if (Time.time - _lastShootTime < _shootDelay) return false;
 
         _lastShootTime = Time.time;
         var position = _bulletSpawn.position;
-        var direction = _bulletSpawn.forward;
+        var velocity = _bulletSpawn.forward * _bulletSpeed;
         Instantiate(_bullet, position, _bulletSpawn.rotation)
-            .Init(direction, _bulletSpeed);
+            .Init(velocity);
 
-        SetShootInfo(position, direction);
+        SetShootInfo(position, velocity);
 
         onShoot?.Invoke();
 
         return true;
     }
 
-    private void SetShootInfo(Vector3 position, Vector3 direction)
+    private void SetShootInfo(Vector3 position, Vector3 velocity)
     {
         _shootInfo = new ShootInfo();
         _shootInfo.pos = position.ToV3();
-        _shootInfo.dir = direction.ToV3();
+        _shootInfo.vel = velocity.ToV3();
     }
 }

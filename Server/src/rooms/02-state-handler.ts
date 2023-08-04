@@ -75,6 +75,11 @@ export class StateHandlerRoom extends Room<State> {
             //console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
             this.state.movePlayer(client.sessionId, data);
         });
+
+        this.onMessage("shoot", (client, data) => {
+            //console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
+            this.broadcast("enShoot", data, {except : client});
+        });
     }
 
     onAuth(client, options, req) {

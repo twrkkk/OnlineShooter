@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private int _delayCount = 5;
     [SerializeField] private EnemyCharacter _character;
+    [SerializeField] private EnemyGun _gun;
     private Vector3 _targetPosition;
     private List<float> _delays = new List<float>();
     private float _lastReceiveTime;
@@ -36,6 +37,13 @@ public class EnemyController : MonoBehaviour
         _player.OnChange += OnChange;
 
         _character.SetSpeed(player.speed);
+    }
+
+    public void Shoot(in ShootInfo info)
+    {
+        Vector3 position = info.pos.ToVector3();
+        Vector3 velocity = info.vel.ToVector3();
+        _gun.Shoot(position, velocity);
     }
 
     public void Destroy()

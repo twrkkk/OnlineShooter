@@ -8,6 +8,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
     [SerializeField] private PlayerCharacter _player;
     [SerializeField] private EnemyController _enemy;
     private ColyseusRoom<State> _room;
+    private Dictionary<string, EnemyController> _enemies = new Dictionary<string, EnemyController>();
     protected override void Awake()
     {
         base.Awake();
@@ -25,6 +26,22 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
 
         _room.OnStateChange += OnChange;
+
+        _room.OnMessage<string>("enShoot", MakeEnemyShoot);
+    }
+
+    private void MakeEnemyShoot(string jsonShootInfo)
+    {
+        Debug.Log(jsonShootInfo);
+        ShootInfo info = JsonUtility.FromJson<ShootInfo>(jsonShootInfo);    
+
+        if(!_enemies.ContainsKey(info.key))
+        {
+            Debug.LogError("There is not enemy, but he tries to shoot");
+            return;
+        }
+
+        _enemies[info.key].Shoot(info);
     }
 
     private void OnChange(State state, bool isFirstState)
@@ -55,11 +72,17 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         var position = new Vector3(player.pX, player.pY, player.pZ);
         var enemy = Instantiate(_enemy, position, Quaternion.identity);
         enemy.Init(player);
+
+        _enemies.Add(key, enemy);
     }
 
     private void RemoveEnemy(string key, Player value)
     {
+        if (!_enemies.ContainsKey(key)) return;
 
+        var enemy = _enemies[key];
+        enemy.Destroy();
+        _enemies.Remove(key);
     }
 
     private void Disconnect()
