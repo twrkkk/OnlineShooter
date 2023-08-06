@@ -28,11 +28,16 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         _room.OnStateChange += OnChange;
 
         _room.OnMessage<string>("enShoot", MakeEnemyShoot);
+        _room.OnMessage<string>("enSitdown", EnemySitdown);
+    }
+
+    private void EnemySitdown(string obj)
+    {
+        throw new NotImplementedException();
     }
 
     private void MakeEnemyShoot(string jsonShootInfo)
     {
-        Debug.Log(jsonShootInfo);
         ShootInfo info = JsonUtility.FromJson<ShootInfo>(jsonShootInfo);    
 
         if(!_enemies.ContainsKey(info.key))
@@ -103,6 +108,11 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
     }
 
     public void SendMessage(string key, string data)
+    {
+        _room.Send(key, data);
+    }
+
+    public void SendMessage(string key, bool data)
     {
         _room.Send(key, data);
     }

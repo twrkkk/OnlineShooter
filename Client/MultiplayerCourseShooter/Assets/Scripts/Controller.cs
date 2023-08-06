@@ -17,6 +17,7 @@ public class Controller : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
 
         bool jump = Input.GetKeyDown(KeyCode.Space);
+        bool sitdown = Input.GetKey(KeyCode.LeftControl);
 
         bool isShoot = Input.GetMouseButton(0);
 
@@ -28,9 +29,11 @@ public class Controller : MonoBehaviour
 
         SendMove();
 
+        _player.Sitdown = sitdown;
+
         if (isShoot && _gun.TryShoot())
             SendShoot(_gun.ShootInfo);
-           
+
     }
 
     public void SendMove()
@@ -57,5 +60,10 @@ public class Controller : MonoBehaviour
         string json = JsonUtility.ToJson(shootInfo);
 
         MultiplayerManager.Instance.SendMessage("shoot", json);
+    }
+
+    public void SendSitdown()
+    {
+
     }
 }

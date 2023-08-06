@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4962407852062175156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6053474481537697470}
+  m_Layer: 0
+  m_Name: HeadAttachPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6053474481537697470
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4962407852062175156}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3566674811857870179}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6344545168097573023
 GameObject:
   m_ObjectHideFlags: 0
@@ -53,6 +84,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Speed>k__BackingField: 6
   _head: {fileID: 7342901311983792689}
+  _rotateLerpVerticalSpeed: 20
+  _rotateLerpHorizontalSpeed: 12
 --- !u!114 &4136256212927987606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,6 +181,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6344545168097573022}
     m_Modifications:
+    - target: {fileID: 113841687929738735, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3783090178872861316, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
       propertyPath: m_Name
       value: NewCharacter
@@ -198,9 +235,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
+--- !u!1 &34783201847931697 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3499506445177207741, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
+  m_PrefabInstance: {fileID: 3524961373185493132}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1892368779232454088
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34783201847931697}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!4 &1090083747715215538 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4597028247493687358, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
+  m_PrefabInstance: {fileID: 3524961373185493132}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3566674811857870179 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 113841687929738735, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
   m_PrefabInstance: {fileID: 3524961373185493132}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6986693303337844958 stripped
@@ -258,3 +325,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &8416696275991225205 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4910384957521570809, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
+  m_PrefabInstance: {fileID: 3524961373185493132}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1054200086814242844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416696275991225205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddcc98c18e948a648b38803a55fea157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 6053474481537697470}

@@ -4,7 +4,10 @@ using UnityEngine;
 public class EnemyCharacter : Character
 {
     [SerializeField] private Transform _head;
+    [SerializeField] private float _rotateLerpVerticalSpeed;
+    [SerializeField] private float _rotateLerpHorizontalSpeed;
     private Vector3 _targetPosition;
+    private Vector2 _targetRotation;
 
     private float _velocityMagnitude;
 
@@ -14,6 +17,12 @@ public class EnemyCharacter : Character
     }
 
     private void Update()
+    {
+        Move();
+        //Rotate();// по вертикали очень сильно обрезается угол наклона
+    }
+
+    private void Move()
     {
         if (_velocityMagnitude > Constants.Epsilon)
         {
@@ -26,6 +35,15 @@ public class EnemyCharacter : Character
         }
     }
 
+    private void Rotate()
+    {
+        float x = Mathf.LerpAngle(transform.localEulerAngles.x, _targetRotation.x, _rotateLerpVerticalSpeed * Time.deltaTime);
+        float y = Mathf.LerpAngle(transform.localEulerAngles.y, _targetRotation.y, _rotateLerpHorizontalSpeed * Time.deltaTime);
+
+        _head.localEulerAngles = new Vector3(x, 0f, 0f);
+        transform.localEulerAngles = new Vector3(0f, y, 0f);
+    }
+
     public void SetSpeed(float value) => Speed = value;
 
     public void SetMovement(in Vector3 position, in Vector3 velocity, in float avgDelay)
@@ -36,11 +54,13 @@ public class EnemyCharacter : Character
     }
     public void SetRotationX(float value)
     {
-        _head.localEulerAngles = new Vector3(value, 0f, 0f);
+       _head.localEulerAngles = new Vector3(value, 0f, 0f);
+        //_targetRotation.x = value;
     }
 
     public void SetRotationY(float value)
     {
         transform.localEulerAngles = new Vector3(0f, value, 0f);
+        //_targetRotation.y = value;
     }
 }

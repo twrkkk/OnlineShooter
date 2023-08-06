@@ -9,11 +9,14 @@ public class CharacterAnimation : MonoBehaviour
     [SerializeField] private Character _character;
     private const string Grounded = "Grounded";
     private const string Speed = "Speed";
+    private const string Sit = "Sit";
+    private bool _sit;
 
     private void Update()
     {
         SetGrounded();
         SetSpeed();
+        SetSitdown();
     }
 
     private void SetGrounded()
@@ -27,5 +30,14 @@ public class CharacterAnimation : MonoBehaviour
         float speed = localVelocity.magnitude / _character.Speed;
         var sign = Mathf.Sign(localVelocity.z);
         _animator.SetFloat(Speed, sign * speed);
+    }
+
+    private void SetSitdown()
+    {
+        if(_sit != _character.Sitdown)
+        {
+            _sit = _character.Sitdown;
+            _animator.SetBool(Sit, _sit);
+        }
     }
 }

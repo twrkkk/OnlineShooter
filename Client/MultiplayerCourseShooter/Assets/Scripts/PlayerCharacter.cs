@@ -8,17 +8,19 @@ public class PlayerCharacter : Character
 {
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Transform _head;
+    [SerializeField] private Transform _body;
     [SerializeField] private Transform _cameraCenter;
     [SerializeField] private float _minHeadAngle = -70f;
     [SerializeField] private float _maxHeadAngle = 70f;
     [SerializeField] private float _jumpForce = 5f;
     [SerializeField] private CheckGrounded _checkGrounded;
     [SerializeField] private float _jumpDelay = 0.2f;
+    [SerializeField] private float _sitHeight = 0.5f;
+    [SerializeField] private float _sitSpeed = 7f;
     private float _currentRotateX;
     private float _inputH;
     private float _inputV;
     private float _mouseY;
-    private bool _isFly = true;
     private float _lastJumpTime;
 
     private void Start()
@@ -59,7 +61,7 @@ public class PlayerCharacter : Character
         _head.localEulerAngles = new Vector3(_currentRotateX, 0f, 0f);
     }
 
-    public void RotateBody() 
+    public void RotateBody()
     {
         //почему-то не работает
         //_rigidbody.angularVelocity += new Vector3(0f, _mouseY, 0f);
@@ -86,5 +88,5 @@ public class PlayerCharacter : Character
         _rigidbody.velocity = Velocity;
     }
 
-   
+
 }
