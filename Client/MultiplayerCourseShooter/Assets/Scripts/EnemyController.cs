@@ -1,7 +1,5 @@
 using Colyseus.Schema;
 using System.Collections.Generic;
-using System.Threading;
-using TMPro;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -44,6 +42,11 @@ public class EnemyController : MonoBehaviour
         Vector3 position = info.pos.ToVector3();
         Vector3 velocity = info.vel.ToVector3();
         _gun.Shoot(position, velocity);
+    }
+
+    public void Sit(in SitdownInfo info)
+    {
+        _character.Sitdown = info.sit;
     }
 
     public void Destroy()

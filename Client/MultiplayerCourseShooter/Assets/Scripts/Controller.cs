@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +7,7 @@ public class Controller : MonoBehaviour
     [SerializeField] private PlayerGun _gun;
     [SerializeField] private float _mouseSpeedX = 2f;
     [SerializeField] private float _mouseSpeedY = 2f;
+
     void Update()
     {
         float h = Input.GetAxisRaw("Horizontal");
@@ -29,7 +29,13 @@ public class Controller : MonoBehaviour
 
         SendMove();
 
-        _player.Sitdown = sitdown;
+        if(sitdown != _player.Sitdown)
+        {
+            _player.Sitdown = sitdown;
+            SitdownInfo info = new SitdownInfo();
+            info.sit = sitdown;
+            SendSitdown(info);
+        }
 
         if (isShoot && _gun.TryShoot())
             SendShoot(_gun.ShootInfo);
@@ -62,8 +68,10 @@ public class Controller : MonoBehaviour
         MultiplayerManager.Instance.SendMessage("shoot", json);
     }
 
-    public void SendSitdown()
+    public void SendSitdown(SitdownInfo info)
     {
-
+        info.key = MultiplayerManager.Instance.GetSessionID();
+        string json = JsonUtility.ToJson(info); 
+        MultiplayerManager.Instance.SendMessage("sit", json);
     }
 }

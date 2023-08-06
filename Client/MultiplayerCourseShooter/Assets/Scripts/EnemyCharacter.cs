@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class EnemyCharacter : Character
@@ -19,7 +18,7 @@ public class EnemyCharacter : Character
     private void Update()
     {
         Move();
-        //Rotate();// по вертикали очень сильно обрезается угол наклона
+       // Rotate();
     }
 
     private void Move()

@@ -268,7 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b54d0e90070f245b59b5ede1eae191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 5252596061185933215}
+  _animator: {fileID: 4058296983766212993}
   _checkGrounded: {fileID: 8509005330810482306}
   _character: {fileID: 6344545168097573020}
 --- !u!54 &4976244757818258849
@@ -489,29 +489,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6128295628213254845, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
   m_PrefabInstance: {fileID: 4933329843889387828}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &5035806357651123419 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 113841687929738735, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
-  m_PrefabInstance: {fileID: 4933329843889387828}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7283493531426071117 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2405660643607550841, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
-  m_PrefabInstance: {fileID: 4933329843889387828}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8139844162890521520 stripped
+--- !u!1 &1470460880987648358 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 3783090178872861316, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5773215855315535954, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
   m_PrefabInstance: {fileID: 4933329843889387828}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &5252596061185933215
+--- !u!95 &4058296983766212993
 Animator:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8139844162890521520}
+  m_GameObject: {fileID: 1470460880987648358}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 473a202cae3a8a34fb818572b2dd62e7, type: 2}
@@ -524,6 +514,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!4 &5035806357651123419 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 113841687929738735, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
+  m_PrefabInstance: {fileID: 4933329843889387828}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7283493531426071117 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2405660643607550841, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}
+  m_PrefabInstance: {fileID: 4933329843889387828}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8423433110710256265 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3499506445177207741, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}

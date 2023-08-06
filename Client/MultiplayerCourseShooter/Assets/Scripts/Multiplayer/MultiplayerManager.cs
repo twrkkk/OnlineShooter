@@ -1,5 +1,4 @@
 using Colyseus;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,12 +27,21 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         _room.OnStateChange += OnChange;
 
         _room.OnMessage<string>("enShoot", MakeEnemyShoot);
-        _room.OnMessage<string>("enSitdown", EnemySitdown);
+        _room.OnMessage<string>("enSit", EnemySitdown);
+        
     }
 
-    private void EnemySitdown(string obj)
+    private void EnemySitdown(string value)
     {
-        throw new NotImplementedException();
+        SitdownInfo info = JsonUtility.FromJson<SitdownInfo>(value);
+
+        if (!_enemies.ContainsKey(info.key))
+        {
+            Debug.LogError("There is not enemy, but he tries to sitdown");
+            return;
+        }
+
+        _enemies[info.key].Sit(in info);
     }
 
     private void MakeEnemyShoot(string jsonShootInfo)
@@ -108,11 +116,6 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
     }
 
     public void SendMessage(string key, string data)
-    {
-        _room.Send(key, data);
-    }
-
-    public void SendMessage(string key, bool data)
     {
         _room.Send(key, data);
     }
