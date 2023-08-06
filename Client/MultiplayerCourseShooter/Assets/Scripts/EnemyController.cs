@@ -47,6 +47,7 @@ public class EnemyController : MonoBehaviour
     public void Sit(in SitdownInfo info)
     {
         _character.Sitdown = info.sit;
+        _character.SitDown();
     }
 
     public void Destroy()

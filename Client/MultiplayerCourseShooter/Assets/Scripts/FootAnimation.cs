@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterAnimation : MonoBehaviour
+public class FootAnimation : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] CheckGrounded _checkGrounded;

@@ -32,6 +32,7 @@ public class Controller : MonoBehaviour
         if(sitdown != _player.Sitdown)
         {
             _player.Sitdown = sitdown;
+            _player.SitDown();
             SitdownInfo info = new SitdownInfo();
             info.sit = sitdown;
             SendSitdown(info);

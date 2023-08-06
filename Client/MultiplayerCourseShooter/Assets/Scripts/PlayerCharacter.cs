@@ -14,6 +14,7 @@ public class PlayerCharacter : Character
     [SerializeField] private float _jumpDelay = 0.2f;
     [SerializeField] private float _sitHeight = 0.5f;
     [SerializeField] private float _sitSpeed = 7f;
+    [SerializeField] private BodyAnimation _bodyAnimation;
     private float _currentRotateX;
     private float _inputH;
     private float _inputV;
@@ -44,6 +45,11 @@ public class PlayerCharacter : Character
     {
         rotateX = _head.localEulerAngles.x;
         rotateY = transform.localEulerAngles.y;
+    }
+
+    public void SitDown()
+    {
+        _bodyAnimation.Sitdown(Sitdown);
     }
 
     void FixedUpdate()

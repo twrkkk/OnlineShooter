@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 6344545168097573022}
   - component: {fileID: 4416692661072762745}
   - component: {fileID: 4136256212927987606}
-  - component: {fileID: 2919899053909411685}
   - component: {fileID: 6574646679646129003}
   - component: {fileID: 2931551840161438407}
   - component: {fileID: 2773383058500497195}
@@ -83,9 +82,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Speed>k__BackingField: 6
+  Sitdown: 0
   _head: {fileID: 7342901311983792689}
   _rotateLerpVerticalSpeed: 20
   _rotateLerpHorizontalSpeed: 12
+  _bodyAnimation: {fileID: 2741421281611296562}
 --- !u!114 &4136256212927987606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,20 +102,6 @@ MonoBehaviour:
   _delayCount: 5
   _character: {fileID: 4416692661072762745}
   _gun: {fileID: 2773383058500497195}
---- !u!136 &2919899053909411685
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6344545168097573023}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &6574646679646129003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,7 +237,7 @@ Animator:
   m_GameObject: {fileID: 34783201847931697}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a7a5fdfe2d4634646ae15bbd8b55b230, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -260,6 +247,33 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2741421281611296562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34783201847931697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77f964a26a10d074b804be99bb2f0a38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 1892368779232454088}
+--- !u!136 &4372759371330848587
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34783201847931697}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 2
+  m_Center: {x: 0, y: -0.06, z: 0.76}
 --- !u!4 &1090083747715215538 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4597028247493687358, guid: 5b9e5150db7b2204d98b5f69a683d1e6, type: 3}

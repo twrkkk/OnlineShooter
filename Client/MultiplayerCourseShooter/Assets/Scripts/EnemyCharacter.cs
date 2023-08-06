@@ -5,6 +5,7 @@ public class EnemyCharacter : Character
     [SerializeField] private Transform _head;
     [SerializeField] private float _rotateLerpVerticalSpeed;
     [SerializeField] private float _rotateLerpHorizontalSpeed;
+    [SerializeField] private BodyAnimation _bodyAnimation;
     private Vector3 _targetPosition;
     private Vector2 _targetRotation;
 
@@ -61,5 +62,10 @@ public class EnemyCharacter : Character
     {
         transform.localEulerAngles = new Vector3(0f, value, 0f);
         //_targetRotation.y = value;
+    }
+
+    public void SitDown()
+    {
+        _bodyAnimation.Sitdown(Sitdown);
     }
 }
