@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class MultiplayerManager : ColyseusManager<MultiplayerManager>
 {
+    [field: SerializeField] public LossCounter LossCounter { get; private set; }
     [SerializeField] private PlayerCharacter _player;
     [SerializeField] private EnemyController _enemy;
+    private ChatLogic _chatLogic;
     private ColyseusRoom<State> _room;
     private Dictionary<string, EnemyController> _enemies = new Dictionary<string, EnemyController>();
     protected override void Awake()
@@ -20,6 +22,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         var data = new Dictionary<string, object>()
         {
             { "speed", _player.Speed},
+            { "hp", _player.maxHealth},
         };
 
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
@@ -28,7 +31,12 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
 
         _room.OnMessage<string>("enShoot", MakeEnemyShoot);
         _room.OnMessage<string>("enSit", EnemySitdown);
-        
+        _room.OnMessage<string>("mes", NewChatMessage);
+    }
+
+    private void NewChatMessage(string message)
+    {
+        _chatLogic.ShowNewMessage(message);
     }
 
     private void EnemySitdown(string value)
@@ -46,9 +54,9 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
 
     private void MakeEnemyShoot(string jsonShootInfo)
     {
-        ShootInfo info = JsonUtility.FromJson<ShootInfo>(jsonShootInfo);    
+        ShootInfo info = JsonUtility.FromJson<ShootInfo>(jsonShootInfo);
 
-        if(!_enemies.ContainsKey(info.key))
+        if (!_enemies.ContainsKey(info.key))
         {
             Debug.LogError("There is not enemy, but he tries to shoot");
             return;
@@ -77,14 +85,24 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
     private void CreatePlayer(Player player)
     {
         var position = new Vector3(player.pX, player.pY, player.pZ);
-        Instantiate(_player, position, Quaternion.identity);
+        var pl = Instantiate(_player, position, Quaternion.identity);
+
+        pl.TryGetComponent<Controller>(out Controller controller);
+        if (controller != null)
+            _room.OnMessage<string>("respawn", controller.Respawn);
+
+        pl.TryGetComponent<ChatLogic>(out ChatLogic chatLogic);
+        if(chatLogic != null)   
+            _chatLogic = chatLogic;
+
+        player.OnChange += pl.onChange;
     }
 
     private void CreateEnemy(string key, Player player)
     {
         var position = new Vector3(player.pX, player.pY, player.pZ);
         var enemy = Instantiate(_enemy, position, Quaternion.identity);
-        enemy.Init(player);
+        enemy.Init(key, player);
 
         _enemies.Add(key, enemy);
     }

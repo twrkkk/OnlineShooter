@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,9 +8,14 @@ public class Controller : MonoBehaviour
     [SerializeField] private PlayerGun _gun;
     [SerializeField] private float _mouseSpeedX = 2f;
     [SerializeField] private float _mouseSpeedY = 2f;
+    [SerializeField] private float _respawnDelay = 3f;
+
+    private bool _hold;
 
     void Update()
     {
+        if (_hold) return;
+
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
@@ -74,5 +80,34 @@ public class Controller : MonoBehaviour
         info.key = MultiplayerManager.Instance.GetSessionID();
         string json = JsonUtility.ToJson(info); 
         MultiplayerManager.Instance.SendMessage("sit", json);
+    }
+
+    public void Respawn(string jsonRespawnInfo)
+    {
+        RespawnInfo info = JsonUtility.FromJson<RespawnInfo>(jsonRespawnInfo);
+        StartCoroutine(Hold());
+        _player.transform.position = new Vector3(info.x, 0f, info.z);
+        _player.SetInput(0, 0, 0);
+        _player.GetRotateInfo(out float rotateX, out float rotateY);
+
+        Dictionary<string, object> data = new Dictionary<string, object>()
+        {
+            {"pX",  info.x},
+            {"pY", 0},
+            {"pZ", info.z},
+            {"vX", 0},
+            {"vY", 0},
+            {"vZ", 0},
+            {"rX", rotateX},
+            {"rY", rotateY},
+        };
+        MultiplayerManager.Instance.SendMessage("move", data);
+    }
+
+    private IEnumerator Hold()
+    {
+        _hold = true;
+        yield return new WaitForSecondsRealtime(_respawnDelay);
+        _hold = false;
     }
 }

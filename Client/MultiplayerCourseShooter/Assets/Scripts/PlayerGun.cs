@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerGun : Gun
 {
+    [SerializeField] private int _damage;
     [SerializeField] private Transform _bulletSpawn;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _shootDelay;
@@ -20,7 +21,7 @@ public class PlayerGun : Gun
         var position = _bulletSpawn.position;
         var velocity = _bulletSpawn.forward * _bulletSpeed;
         Instantiate(_bullet, position, _bulletSpawn.rotation)
-            .Init(velocity);
+            .Init(velocity, _damage);
 
         SetShootInfo(position, velocity);
 

@@ -29,12 +29,14 @@ public class EnemyController : MonoBehaviour
         _targetPosition = transform.position;
     }
 
-    public void Init(Player player)
+    public void Init(string key, Player player)
     {
+        _character.Init(key);
         _player = player;
         _player.OnChange += OnChange;
 
         _character.SetSpeed(player.speed);
+        _character.SetMaxHealth(player.maxHP);
     }
 
     public void Shoot(in ShootInfo info)
@@ -75,6 +77,13 @@ public class EnemyController : MonoBehaviour
         {
             switch (change.Field)
             {
+                case "loss":
+                    MultiplayerManager.Instance.LossCounter.SetEnemyLoss((byte)change.Value);
+                    break;
+                case "curHP":
+                    if ((sbyte)change.Value > (sbyte)change.PreviousValue)
+                        _character.SetHealth((sbyte)change.Value);
+                    break;
                 case "pX":
                     _targetPosition.x = (float)change.Value;
                     break;

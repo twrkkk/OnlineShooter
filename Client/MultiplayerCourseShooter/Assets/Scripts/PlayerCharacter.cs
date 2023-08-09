@@ -1,8 +1,13 @@
+using Colyseus.Schema;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerCharacter : Character
 {
+    [SerializeField] private Health _health;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Transform _head;
     [SerializeField] private Transform _body;
@@ -15,6 +20,7 @@ public class PlayerCharacter : Character
     [SerializeField] private float _sitHeight = 0.5f;
     [SerializeField] private float _sitSpeed = 7f;
     [SerializeField] private BodyAnimation _bodyAnimation;
+    [SerializeField] private LossCounter _lossCounter;
     private float _currentRotateX;
     private float _inputH;
     private float _inputV;
@@ -23,6 +29,8 @@ public class PlayerCharacter : Character
 
     private void Start()
     {
+        _health.SetMax(maxHealth);
+        _health.SetCurrent(maxHealth);
         Transform camera = Camera.main.transform;
         camera.parent = _cameraCenter;
         camera.localPosition = Vector3.zero;
@@ -91,5 +99,21 @@ public class PlayerCharacter : Character
         _rigidbody.velocity = Velocity;
     }
 
-
+    public void onChange(List<DataChange> changes)
+    {
+        foreach (DataChange change in changes)
+        {
+            switch (change.Field)
+            {
+                case "loss":
+                    MultiplayerManager.Instance.LossCounter.SetPlayerLoss((byte)change.Value);
+                    break;
+                case "curHP":
+                    _health.SetCurrent((sbyte)change.Value);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

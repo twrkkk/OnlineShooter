@@ -22,3 +22,16 @@ public struct ShootInfo
     public V3 pos;
     public V3 vel;
 }
+
+[Serializable]
+public struct RespawnInfo
+{
+    public sbyte x;
+    public sbyte z;
+
+    public RespawnInfo(sbyte x, sbyte z)
+    {
+        this.x = x;
+        this.z = z;
+    }
+}

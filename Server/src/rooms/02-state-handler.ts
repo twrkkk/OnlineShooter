@@ -2,6 +2,15 @@ import { Room, Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
+    @type("uint8")
+    loss = 0;
+
+    @type("int8")
+    maxHP = 0;
+
+    @type("int8")
+    curHP = 0;
+    
     @type("number")
     speed = 0;
 
@@ -38,6 +47,8 @@ export class State extends Schema {
 
     createPlayer(sessionId: string, data: any) {
         const player = new Player();
+        player.maxHP = data.hp;
+        player.curHP = data.hp;
         player.speed = data.speed;
 
         this.players.set(sessionId, player);
@@ -64,7 +75,7 @@ export class State extends Schema {
 }
 
 export class StateHandlerRoom extends Room<State> {
-    maxClients = 4;
+    maxClients = 2;
 
     onCreate (options) {
         console.log("StateHandlerRoom created!", options);
@@ -72,18 +83,43 @@ export class StateHandlerRoom extends Room<State> {
         this.setState(new State());
 
         this.onMessage("move", (client, data) => {
-            //console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
             this.state.movePlayer(client.sessionId, data);
         });
 
         this.onMessage("shoot", (client, data) => {
-            //console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
             this.broadcast("enShoot", data, {except : client});
         });
 
         this.onMessage("sit", (client, data) => {
-            //console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
             this.broadcast("enSit", data, {except : client});
+        });
+
+        this.onMessage("dmg", (client, data) => {
+            const sessionId = data.id;
+            const player = this.state.players.get(sessionId);
+            const hp = player.curHP - data.dmg;
+
+            if(hp > 0)
+            {
+                player.curHP = hp;
+                return;
+            }
+
+            player.loss++;
+            player.curHP = player.maxHP;
+
+            this.clients.forEach(function(client){
+                if(client.id == sessionId){
+                    const x = Math.floor(Math.random() * 50) - 25;
+                    const z = Math.floor(Math.random() * 50) - 25;
+                    const message = JSON.stringify({x,z});
+                    client.send("respawn", message);
+                }
+            })
+        });
+
+        this.onMessage("chat", (client, data) => {
+            this.broadcast("mes", data, {except : client});
         });
     }
 
@@ -92,6 +128,7 @@ export class StateHandlerRoom extends Room<State> {
     }
 
     onJoin (client: Client, data: any) {
+        if(this.clients.length > 1) this.lock();
         client.send("hello", "world");
         this.state.createPlayer(client.sessionId, data);
     }

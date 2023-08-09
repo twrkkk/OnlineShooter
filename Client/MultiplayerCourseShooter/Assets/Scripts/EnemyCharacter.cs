@@ -1,7 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyCharacter : Character
 {
+    private string _sessionID;
+
+    [SerializeField] private Health _health;
     [SerializeField] private Transform _head;
     [SerializeField] private float _rotateLerpVerticalSpeed;
     [SerializeField] private float _rotateLerpHorizontalSpeed;
@@ -19,7 +23,7 @@ public class EnemyCharacter : Character
     private void Update()
     {
         Move();
-       // Rotate();
+        //Rotate();
     }
 
     private void Move()
@@ -44,7 +48,23 @@ public class EnemyCharacter : Character
         transform.localEulerAngles = new Vector3(0f, y, 0f);
     }
 
+    public void Init(string sessionID)
+    {
+        _sessionID = sessionID; 
+    }
+
     public void SetSpeed(float value) => Speed = value;
+    public void SetMaxHealth(int value)
+    {
+        maxHealth = value;
+        _health.SetMax(maxHealth);
+        _health.SetCurrent(maxHealth);
+    }
+
+    public void SetHealth(int value)
+    {
+        _health.SetCurrent(value);
+    }
 
     public void SetMovement(in Vector3 position, in Vector3 velocity, in float avgDelay)
     {
@@ -54,7 +74,7 @@ public class EnemyCharacter : Character
     }
     public void SetRotationX(float value)
     {
-       _head.localEulerAngles = new Vector3(value, 0f, 0f);
+        _head.localEulerAngles = new Vector3(value, 0f, 0f);
         //_targetRotation.x = value;
     }
 
@@ -67,5 +87,18 @@ public class EnemyCharacter : Character
     public void SitDown()
     {
         _bodyAnimation.Sitdown(Sitdown);
+    }
+
+    public void ApplyDamage(int value)
+    {
+        _health.ApplyDamage(value);
+
+        Dictionary<string, object> data = new Dictionary<string, object>()
+        {
+            { "id", _sessionID},
+            {"dmg",  value}
+        };
+
+        MultiplayerManager.Instance.SendMessage("dmg", data);
     }
 }
