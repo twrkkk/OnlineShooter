@@ -24,6 +24,19 @@ public struct ShootInfo
 }
 
 [Serializable]
+public struct ChangeGunInfo
+{
+    public string key;
+    public int index;
+
+    public ChangeGunInfo(string key, int index)
+    {
+        this.key = key;
+        this.index = index;
+    }
+}
+
+[Serializable]
 public struct RespawnInfo
 {
     public sbyte x;

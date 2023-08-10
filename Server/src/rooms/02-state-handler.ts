@@ -118,6 +118,10 @@ export class StateHandlerRoom extends Room<State> {
             })
         });
 
+        this.onMessage("gun", (client, data) => {
+            this.broadcast("enGun", data, {except: client});
+        })
+
         this.onMessage("chat", (client, data) => {
             this.broadcast("mes", data, {except : client});
         });
@@ -128,7 +132,7 @@ export class StateHandlerRoom extends Room<State> {
     }
 
     onJoin (client: Client, data: any) {
-        if(this.clients.length > 1) this.lock();
+       // if(this.clients.length > 1) this.lock();
         client.send("hello", "world");
         this.state.createPlayer(client.sessionId, data);
     }

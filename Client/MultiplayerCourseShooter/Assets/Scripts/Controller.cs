@@ -1,3 +1,5 @@
+using GameDevWare.Serialization;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +7,19 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     [SerializeField] private PlayerCharacter _player;
-    [SerializeField] private PlayerGun _gun;
+    [SerializeField] private PlayerGun[] _guns;
     [SerializeField] private float _mouseSpeedX = 2f;
     [SerializeField] private float _mouseSpeedY = 2f;
     [SerializeField] private float _respawnDelay = 3f;
 
     private bool _hold;
+    private PlayerGun _currGun;
+    private int _currGunIndex;
+
+    private void Start()
+    {
+        ActivateGun(0);
+    }
 
     void Update()
     {
@@ -27,6 +36,9 @@ public class Controller : MonoBehaviour
 
         bool isShoot = Input.GetMouseButton(0);
 
+        bool nextWeapon = Input.GetKeyDown(KeyCode.E);
+        bool prevWeapon = Input.GetKeyDown(KeyCode.Q);
+
         _player.SetInput(h, v, mouseX * _mouseSpeedX);
         _player.RotateHead(-mouseY * _mouseSpeedY);
         _player.RotateBody();
@@ -35,7 +47,7 @@ public class Controller : MonoBehaviour
 
         SendMove();
 
-        if(sitdown != _player.Sitdown)
+        if (sitdown != _player.Sitdown)
         {
             _player.Sitdown = sitdown;
             _player.SitDown();
@@ -44,9 +56,36 @@ public class Controller : MonoBehaviour
             SendSitdown(info);
         }
 
-        if (isShoot && _gun.TryShoot())
-            SendShoot(_gun.ShootInfo);
+        if (nextWeapon)
+            ActivateGun(++_currGunIndex);
+        else if(prevWeapon)
+            ActivateGun(--_currGunIndex);
 
+        if (isShoot && _currGun.TryShoot())
+            SendShoot(_currGun.ShootInfo);
+    }
+
+    private void ActivateGun(int index)
+    {
+        index = CycleGunIndex(index);
+        _currGunIndex = index;
+        _currGun = _guns[_currGunIndex];
+
+        for (int i = 0; i < _guns.Length; i++)
+        {
+            if (i == index)
+                _guns[i].gameObject.SetActive(true);
+            else
+                _guns[i].gameObject.SetActive(false);
+        }
+
+        SendCurrentGun();
+    }
+
+    private int CycleGunIndex(int index)
+    {
+        index = index < 0 ? _guns.Length - Mathf.Abs(index) : index % _guns.Length;
+        return index;
     }
 
     public void SendMove()
@@ -78,7 +117,7 @@ public class Controller : MonoBehaviour
     public void SendSitdown(SitdownInfo info)
     {
         info.key = MultiplayerManager.Instance.GetSessionID();
-        string json = JsonUtility.ToJson(info); 
+        string json = JsonUtility.ToJson(info);
         MultiplayerManager.Instance.SendMessage("sit", json);
     }
 
@@ -109,5 +148,14 @@ public class Controller : MonoBehaviour
         _hold = true;
         yield return new WaitForSecondsRealtime(_respawnDelay);
         _hold = false;
+    }
+
+    private void SendCurrentGun()
+    {
+        string key = MultiplayerManager.Instance.GetSessionID();
+        ChangeGunInfo info = new ChangeGunInfo(key, _currGunIndex);
+
+        string json = JsonUtility.ToJson(info);
+        MultiplayerManager.Instance.SendMessage("gun", json);
     }
 }

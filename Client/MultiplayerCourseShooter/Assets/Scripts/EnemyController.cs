@@ -1,4 +1,5 @@
 using Colyseus.Schema;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,11 +7,14 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private int _delayCount = 5;
     [SerializeField] private EnemyCharacter _character;
-    [SerializeField] private EnemyGun _gun;
+    [SerializeField] private EnemyGun[] _guns;
     private Vector3 _targetPosition;
     private List<float> _delays = new List<float>();
     private float _lastReceiveTime;
     private Player _player;
+
+    private int _currGunIndex;
+    private EnemyGun _currGun;
     private float _avgDelay
     {
         get
@@ -43,7 +47,7 @@ public class EnemyController : MonoBehaviour
     {
         Vector3 position = info.pos.ToVector3();
         Vector3 velocity = info.vel.ToVector3();
-        _gun.Shoot(position, velocity);
+        _currGun.Shoot(position, velocity);
     }
 
     public void Sit(in SitdownInfo info)
@@ -114,5 +118,25 @@ public class EnemyController : MonoBehaviour
         }
 
         _character.SetMovement(_targetPosition, _velocity, _avgDelay);
+    }
+
+    public void ChangeGun(int index)
+    {
+        if (GunIndexOutOfRange(index)) return;
+        _currGunIndex = index;
+        _currGun = _guns[_currGunIndex];
+
+        for (int i = 0; i < _guns.Length; i++)
+        {
+            if (i == _currGunIndex)
+                _guns[i].gameObject.SetActive(true);
+            else
+                _guns[i].gameObject.SetActive(false);
+        }
+    }
+
+    private bool GunIndexOutOfRange(int index)
+    {
+        return index < 0 || index > _guns.Length - 1;
     }
 }

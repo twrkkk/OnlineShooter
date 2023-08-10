@@ -1,5 +1,7 @@
 using Colyseus;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class MultiplayerManager : ColyseusManager<MultiplayerManager>
@@ -23,6 +25,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         {
             { "speed", _player.Speed},
             { "hp", _player.maxHealth},
+            { "team", "A"},
         };
 
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
@@ -32,6 +35,21 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         _room.OnMessage<string>("enShoot", MakeEnemyShoot);
         _room.OnMessage<string>("enSit", EnemySitdown);
         _room.OnMessage<string>("mes", NewChatMessage);
+        _room.OnMessage<string>("enGun", ChangeGun);
+    }
+
+    private void ChangeGun(string jsonChangeGunInfo)
+    {
+        ChangeGunInfo info = JsonUtility.FromJson<ChangeGunInfo>(jsonChangeGunInfo);
+
+        if (!_enemies.ContainsKey(info.key))
+        {
+            Debug.LogError("There is not enemy, but he tries to change gun");
+            return;
+        }
+
+        Debug.Log(info);
+        _enemies[info.key].ChangeGun(info.index);
     }
 
     private void NewChatMessage(string message)
