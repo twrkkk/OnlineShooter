@@ -16,6 +16,8 @@ public class Controller : MonoBehaviour
     private PlayerGun _currGun;
     private int _currGunIndex;
 
+    public bool IsPrinting { get; set; }
+
     private void Start()
     {
         ActivateGun(0);
@@ -24,6 +26,7 @@ public class Controller : MonoBehaviour
     void Update()
     {
         if (_hold) return;
+        if (IsPrinting) return;
 
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");

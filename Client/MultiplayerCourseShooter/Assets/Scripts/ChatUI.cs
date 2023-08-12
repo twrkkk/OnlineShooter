@@ -1,13 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ChatUI : MonoBehaviour
 {
-    [SerializeField] private GameObject _messagePrefab;
-    [SerializeField] private Transform _container;
-    public void CreateMessage(string text)
+    [SerializeField] private Text _text;
+    public void ApplyMessage(string text)
     {
-        GameObject newMessage = Instantiate(_messagePrefab, _container);
-        newMessage.GetComponent<Text>().text = text;    
+        _text.text += $"\n[{DateTime.Now.ToString("HH:mm:ss")}] {text}";    
     }
 }

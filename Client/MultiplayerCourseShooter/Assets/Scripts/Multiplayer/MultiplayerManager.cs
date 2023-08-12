@@ -25,7 +25,6 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         {
             { "speed", _player.Speed},
             { "hp", _player.maxHealth},
-            { "team", "A"},
         };
 
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);

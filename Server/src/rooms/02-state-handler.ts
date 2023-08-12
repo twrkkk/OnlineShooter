@@ -123,7 +123,7 @@ export class StateHandlerRoom extends Room<State> {
         })
 
         this.onMessage("chat", (client, data) => {
-            this.broadcast("mes", data, {except : client});
+            this.broadcast("mes", data);
         });
     }
 
