@@ -11,7 +11,7 @@ public class ChatLogic : MonoBehaviour
 
     private void Update()
     {
-        if(_isPrinting == false && Input.GetKeyDown(KeyCode.Return))
+        if (_isPrinting == false && Input.GetKeyDown(KeyCode.Return))
         {
             ActivateInput();
         }
@@ -49,9 +49,10 @@ public class ChatLogic : MonoBehaviour
 
     public void SendMessage(string message)
     {
-        if (string.IsNullOrEmpty(message)) return;
+        bool empty = string.IsNullOrEmpty(message);
 
-        MultiplayerManager.Instance.SendMessage("chat", message);
+        if (!empty)
+            MultiplayerManager.Instance.SendMessage("chat", message);
 
         _input.text = "";
         DeactivateInput();
@@ -70,7 +71,7 @@ public class ChatLogic : MonoBehaviour
 
     public void ShowNewMessage(string message)
     {
-        if(string.IsNullOrEmpty(message)) return;
+        if (string.IsNullOrEmpty(message)) return;
         _chatUI.ApplyMessage(message);
     }
 

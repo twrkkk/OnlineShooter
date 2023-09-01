@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2765827034463233573}
   - component: {fileID: -5871146239482724402}
   - component: {fileID: 1919720703303925245}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 1919720703303925245}
+  _lifeTime: 5
 --- !u!54 &1919720703303925245
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -76,7 +77,7 @@ GameObject:
   - component: {fileID: 2765827035059258710}
   - component: {fileID: 2765827035059258711}
   - component: {fileID: 2765827035059258708}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}

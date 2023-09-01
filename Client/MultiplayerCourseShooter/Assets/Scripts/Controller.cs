@@ -16,23 +16,50 @@ public class Controller : MonoBehaviour
     private PlayerGun _currGun;
     private int _currGunIndex;
 
-    public bool IsPrinting { get; set; }
+    private bool _isPrinting;
+    private bool _showCursor;
+
+    public bool IsPrinting
+    {
+        get
+        {
+            return _isPrinting;
+        }
+        set
+        {
+            _isPrinting = value;
+            _showCursor = !value;
+            if(_showCursor)
+                Cursor.lockState = CursorLockMode.Locked;
+            else
+                Cursor.lockState = CursorLockMode.None;
+        }
+    }
 
     private void Start()
     {
         ActivateGun(0);
+        _showCursor = true;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+            Cursor.lockState = CursorLockMode.None; 
+        if(Input.GetMouseButtonDown(0)) 
+            Cursor.lockState = CursorLockMode.Locked; 
+
         if (_hold) return;
+
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
         if (IsPrinting) return;
 
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
 
         bool jump = Input.GetKeyDown(KeyCode.Space);
         bool sitdown = Input.GetKey(KeyCode.LeftControl);
@@ -44,7 +71,7 @@ public class Controller : MonoBehaviour
 
         _player.SetInput(h, v, mouseX * _mouseSpeedX);
         _player.RotateHead(-mouseY * _mouseSpeedY);
-        _player.RotateBody();
+        //_player.RotateBody();
         if (jump)
             _player.Jump();
 
@@ -124,24 +151,26 @@ public class Controller : MonoBehaviour
         MultiplayerManager.Instance.SendMessage("sit", json);
     }
 
-    public void Respawn(string jsonRespawnInfo)
+    public void Respawn(int index)
     {
-        RespawnInfo info = JsonUtility.FromJson<RespawnInfo>(jsonRespawnInfo);
+        Debug.Log(index);
+        MultiplayerManager.Instance._spawnPoints.GetPoint(index, out Vector3 position, out Vector3 rotation);
+
         StartCoroutine(Hold());
-        _player.transform.position = new Vector3(info.x, 0f, info.z);
+        _player.transform.position = position;
+        _player.transform.eulerAngles = new Vector3(0f, rotation.y, 0f);
         _player.SetInput(0, 0, 0);
-        _player.GetRotateInfo(out float rotateX, out float rotateY);
 
         Dictionary<string, object> data = new Dictionary<string, object>()
         {
-            {"pX",  info.x},
-            {"pY", 0},
-            {"pZ", info.z},
+            {"pX",  position.x},
+            {"pY", position.y},
+            {"pZ", position.z},
             {"vX", 0},
             {"vY", 0},
             {"vZ", 0},
-            {"rX", rotateX},
-            {"rY", rotateY},
+            {"rX", 0},
+            {"rY", rotation.y},
         };
         MultiplayerManager.Instance.SendMessage("move", data);
     }

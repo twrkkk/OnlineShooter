@@ -38,6 +38,7 @@ public class PlayerCharacter : Character
 
     public void SetInput(float h, float v, float mouseY)
     {
+        Debug.Log(mouseY);
         _inputH = h;
         _inputV = v;
         _mouseY += mouseY;
@@ -73,9 +74,8 @@ public class PlayerCharacter : Character
 
     public void RotateBody()
     {
-        //почему-то не работает
-        //_rigidbody.angularVelocity += new Vector3(0f, _mouseY, 0f);
-        transform.eulerAngles += new Vector3(0f, _mouseY, 0f);
+        _rigidbody.angularVelocity = new Vector3(0f, _mouseY, 0f);
+        //transform.eulerAngles += new Vector3(0f, _mouseY, 0f);
         _mouseY = 0;
     }
 

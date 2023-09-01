@@ -21,13 +21,15 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        collision.collider.TryGetComponent<HitBox>(out HitBox hitBox);
+
         Transform p = null;
         if (p = collision.collider.transform.parent)
         {
             if (p.parent)
             {
                 if(p.parent.TryGetComponent<EnemyCharacter>(out EnemyCharacter enemy))
-                    enemy.ApplyDamage(_damage);
+                    enemy.ApplyDamage((int)(_damage * hitBox?.DamageMultiplier));
             }
         }
         Destroy();

@@ -35,16 +35,3 @@ public struct ChangeGunInfo
         this.index = index;
     }
 }
-
-[Serializable]
-public struct RespawnInfo
-{
-    public sbyte x;
-    public sbyte z;
-
-    public RespawnInfo(sbyte x, sbyte z)
-    {
-        this.x = x;
-        this.z = z;
-    }
-}

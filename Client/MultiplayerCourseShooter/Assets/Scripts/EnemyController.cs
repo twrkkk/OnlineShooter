@@ -41,6 +41,7 @@ public class EnemyController : MonoBehaviour
 
         _character.SetSpeed(player.speed);
         _character.SetMaxHealth(player.maxHP);
+        ChangeGun(0);
     }
 
     public void Shoot(in ShootInfo info)

@@ -1,14 +1,15 @@
 using Colyseus;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
 public class MultiplayerManager : ColyseusManager<MultiplayerManager>
 {
+    [field: SerializeField] public Skins _skins { get; private set; }
     [field: SerializeField] public LossCounter LossCounter { get; private set; }
     [SerializeField] private PlayerCharacter _player;
     [SerializeField] private EnemyController _enemy;
+    [field: SerializeField] public SpawnPoints _spawnPoints { get; private set; }
     private ChatLogic _chatLogic;
     private ColyseusRoom<State> _room;
     private Dictionary<string, EnemyController> _enemies = new Dictionary<string, EnemyController>();
@@ -21,10 +22,18 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
 
     private async void Connect()
     {
+        _spawnPoints.GetPoint(UnityEngine.Random.Range(0, _spawnPoints.Length), out Vector3 position, out Vector3 rotation);
+
         var data = new Dictionary<string, object>()
         {
+            { "skins", _skins.Length},
+            { "count", _spawnPoints.Length},
             { "speed", _player.Speed},
             { "hp", _player.maxHealth},
+            { "pX", position.x},
+            { "pY", position.y},
+            { "pZ", position.z},
+            { "rY", rotation.y},
         };
 
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
@@ -102,11 +111,13 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
     private void CreatePlayer(Player player)
     {
         var position = new Vector3(player.pX, player.pY, player.pZ);
-        var pl = Instantiate(_player, position, Quaternion.identity);
+        Quaternion rotation = Quaternion.Euler(0, player.rY, 0);
+        var pl = Instantiate(_player, position, rotation);
+        pl.GetComponent<SetSkin>().Set(_skins.GetMaterial(player.skin));
 
         pl.TryGetComponent<Controller>(out Controller controller);
         if (controller != null)
-            _room.OnMessage<string>("respawn", controller.Respawn);
+            _room.OnMessage<int>("respawn", controller.Respawn);
 
         pl.TryGetComponent<ChatLogic>(out ChatLogic chatLogic);
         if(chatLogic != null)   
@@ -119,6 +130,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
     {
         var position = new Vector3(player.pX, player.pY, player.pZ);
         var enemy = Instantiate(_enemy, position, Quaternion.identity);
+        enemy.GetComponent<SetSkin>().Set(_skins.GetMaterial(player.skin));
         enemy.Init(key, player);
 
         _enemies.Add(key, enemy);

@@ -23,7 +23,7 @@ public class EnemyCharacter : Character
     private void Update()
     {
         Move();
-        //Rotate();
+        Rotate();
     }
 
     private void Move()
@@ -41,7 +41,7 @@ public class EnemyCharacter : Character
 
     private void Rotate()
     {
-        float x = Mathf.LerpAngle(transform.localEulerAngles.x, _targetRotation.x, _rotateLerpVerticalSpeed * Time.deltaTime);
+        float x = Mathf.LerpAngle(_head.localEulerAngles.x, _targetRotation.x, _rotateLerpVerticalSpeed * Time.deltaTime);
         float y = Mathf.LerpAngle(transform.localEulerAngles.y, _targetRotation.y, _rotateLerpHorizontalSpeed * Time.deltaTime);
 
         _head.localEulerAngles = new Vector3(x, 0f, 0f);
@@ -74,14 +74,14 @@ public class EnemyCharacter : Character
     }
     public void SetRotationX(float value)
     {
-        _head.localEulerAngles = new Vector3(value, 0f, 0f);
-        //_targetRotation.x = value;
+        //_head.localEulerAngles = new Vector3(value, 0f, 0f);
+        _targetRotation.x = value;
     }
 
     public void SetRotationY(float value)
     {
-        transform.localEulerAngles = new Vector3(0f, value, 0f);
-        //_targetRotation.y = value;
+        //transform.localEulerAngles = new Vector3(0f, value, 0f);
+        _targetRotation.y = value;
     }
 
     public void SitDown()
@@ -91,6 +91,7 @@ public class EnemyCharacter : Character
 
     public void ApplyDamage(int value)
     {
+        Debug.Log(value);
         _health.ApplyDamage(value);
 
         Dictionary<string, object> data = new Dictionary<string, object>()
